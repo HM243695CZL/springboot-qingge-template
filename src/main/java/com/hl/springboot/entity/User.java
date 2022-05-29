@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -39,6 +41,7 @@ public class User implements Serializable {
 
       @ApiModelProperty("密码")
       @Alias("密码")
+      @JsonIgnore
       private String password;
 
       @ApiModelProperty("昵称")
