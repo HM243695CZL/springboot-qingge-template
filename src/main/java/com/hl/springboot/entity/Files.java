@@ -14,10 +14,9 @@ public class Files {
     private Integer id;
     private String name;
     private String originName;
-    private String md5;
     private String type;
     private String size;
-    private String url;
+    private String downloadUrl;
     private Boolean isDelete;
     private Boolean enable;
 }

@@ -19,4 +19,5 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 files:
   upload:
-    path: D:/projectMenu/java/files/
+    staticAccessPath: /public/**
+    path: D:/projectMenu/java/springboot/src/main/resources/static/public/

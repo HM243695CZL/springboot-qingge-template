@@ -3,8 +3,13 @@ package com.hl.springboot.controller;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.hl.springboot.common.Constants;
+import com.hl.springboot.common.Result;
 import com.hl.springboot.entity.Files;
 import com.hl.springboot.mapper.FilesMapper;
+import com.hl.springboot.service.IFilesService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.List;
 
 /**
  * 文件上传接口
@@ -23,6 +29,9 @@ import java.net.URLEncoder;
 @RestController
 @RequestMapping("/file")
 public class FilesController {
+
+    @Resource
+    private IFilesService filesService;
 
     @Value("${files.upload.path}")
     private String fileUploadPath;
@@ -36,6 +45,27 @@ public class FilesController {
     @Value("${server.port}")
     private String serverPort;
 
+    @GetMapping("/page")
+    public Result page(
+            @RequestParam Integer pageIndex,
+            @RequestParam Integer pageSize) {
+        QueryWrapper<Files> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("id");
+        Page<Files> page = filesService.page(new Page<>(pageIndex, pageSize), queryWrapper);
+        return Result.success(page);
+    }
+
+    @PostMapping("/delete")
+    public Result delete(@RequestBody List<Integer> ids) {
+        Files file = filesService.getById(ids.get(0));
+        String name = file.getName();
+        File f = new File(fileUploadPath + name);
+       if (f.delete()) {
+           return Result.success(filesService.removeByIds(ids));
+       } else {
+           return Result.error(Constants.CODE_500, "文件删除失败");
+       }
+    }
 
     /**
      * 文件上传接口
@@ -65,7 +95,7 @@ public class FilesController {
         saveFile.setOriginName(originalFilename);
         saveFile.setType(type);
         saveFile.setSize(size / 1024 + "KB");
-        saveFile.setUrl(url);
+        saveFile.setDownloadUrl(url);
         filesMapper.insert(saveFile);
         return url;
     }
@@ -79,6 +109,9 @@ public class FilesController {
     @GetMapping("/download/{fileUUID}")
     public void download(@PathVariable String fileUUID, HttpServletResponse response) throws IOException {
         // 根据文件的唯一标识码获取文件
+        System.out.println("==============");
+        System.out.println(fileUploadPath + fileUUID);
+        System.out.println("==============");
         File uploadFile = new File(fileUploadPath + fileUUID);
         // 设置输出流的格式
         ServletOutputStream os = response.getOutputStream();
