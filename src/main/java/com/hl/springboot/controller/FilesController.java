@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hl.springboot.common.Constants;
 import com.hl.springboot.common.Result;
 import com.hl.springboot.entity.Files;
+import com.hl.springboot.exception.ServiceException;
 import com.hl.springboot.mapper.FilesMapper;
 import com.hl.springboot.service.IFilesService;
 import org.springframework.beans.factory.annotation.Value;
@@ -109,15 +110,14 @@ public class FilesController {
     @GetMapping("/download/{fileUUID}")
     public void download(@PathVariable String fileUUID, HttpServletResponse response) throws IOException {
         // 根据文件的唯一标识码获取文件
-        System.out.println("==============");
-        System.out.println(fileUploadPath + fileUUID);
-        System.out.println("==============");
         File uploadFile = new File(fileUploadPath + fileUUID);
+        if (!uploadFile.exists()) {
+            throw new ServiceException(Constants.CODE_404, "文件不存在");
+        }
         // 设置输出流的格式
         ServletOutputStream os = response.getOutputStream();
         response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileUUID, "UTF-8"));
         response.setContentType("application/octet-stream");
-
         // 读取文件的字节流
         os.write(FileUtil.readBytes(uploadFile));
         os.flush();
