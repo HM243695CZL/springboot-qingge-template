@@ -67,7 +67,7 @@ public class UserController {
     }
 
     @GetMapping("/page")
-    public Result findPage(@RequestParam Integer pageNum,
+    public Result page(@RequestParam Integer pageIndex,
                                 @RequestParam Integer pageSize) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByDesc("id");
@@ -75,7 +75,7 @@ public class UserController {
         System.out.println("========");
         System.out.println(currentUser.getUsername());
         System.out.println("========");
-        return Result.success(userService.page(new Page<>(pageNum, pageSize), queryWrapper));
+        return Result.success(userService.page(new Page<>(pageIndex, pageSize), queryWrapper));
     }
 
     @GetMapping("/export")

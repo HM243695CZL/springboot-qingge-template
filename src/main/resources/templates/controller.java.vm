@@ -2,6 +2,7 @@ package ${package.Controller};
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.hl.springboot.entity.IdEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.List;
@@ -48,40 +49,41 @@ public class ${table.controllerName} {
     private ${table.serviceName} ${table.entityPath}Service;
 
     // 新增或者更新
-    @PostMapping
+    @PostMapping("/create")
     public Result save(@RequestBody ${entity} ${table.entityPath}) {
-        ${table.entityPath}Service.saveOrUpdate(${table.entityPath});
-        return Result.success();
+        return Result.success(${table.entityPath}Service.saveOrUpdate(${table.entityPath}));
     }
 
-    @DeleteMapping("/{id}")
-    public Result delete(@PathVariable Integer id) {
-        ${table.entityPath}Service.removeById(id);
-        return Result.success();
+    // 删除
+    @PostMapping("/delete")
+    public Result delete(@RequestBody IdEntity param) {
+        return Result.success( ${table.entityPath}Service.removeById(param.getId()));
     }
 
+    // 批量删除
     @PostMapping("/del/batch")
     public Result deleteBatch(@RequestBody List<Integer> ids) {
-        ${table.entityPath}Service.removeByIds(ids);
-        return Result.success();
+        return Result.success(${table.entityPath}Service.removeByIds(ids));
     }
 
-    @GetMapping
-    public Result findAll() {
+    // 获取全部
+    @GetMapping("/list")
+    public Result list() {
         return Result.success(${table.entityPath}Service.list());
     }
 
-    @GetMapping("/{id}")
-    public Result findOne(@PathVariable Integer id) {
-        return Result.success(${table.entityPath}Service.getById(id));
+    @PostMapping("/view")
+    public Result findOne(@RequestBody IdEntity param) {
+        return Result.success(${table.entityPath}Service.getById(param.getId()));
     }
 
+    // 分页查询
     @GetMapping("/page")
-    public Result findPage(@RequestParam Integer pageNum,
-                                @RequestParam Integer pageSize) {
+    public Result page(@RequestParam Integer pageIndex,
+                       @RequestParam Integer pageSize) {
         QueryWrapper<${entity}> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByDesc("id");
-        return Result.success(${table.entityPath}Service.page(new Page<>(pageNum, pageSize), queryWrapper));
+        return Result.success(${table.entityPath}Service.page(new Page<>(pageIndex, pageSize), queryWrapper));
     }
 
 }
