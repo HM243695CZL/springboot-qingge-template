@@ -64,7 +64,8 @@ public class FilesController {
        if (f.delete()) {
            return Result.success(filesService.removeByIds(ids));
        } else {
-           return Result.error(Constants.CODE_500, "文件删除失败");
+           boolean b = filesService.removeByIds(ids);
+           return Result.error(Constants.CODE_500, "文件不存在，已删除数据库记录");
        }
     }
 
