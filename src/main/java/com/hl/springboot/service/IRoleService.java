@@ -1,7 +1,10 @@
 package com.hl.springboot.service;
 
+import com.hl.springboot.controller.dto.RoleMenuDTO;
 import com.hl.springboot.entity.Role;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IRoleService extends IService<Role> {
 
+    void setRoleMenu(RoleMenuDTO roleMenuDTO);
+
+    List<Integer> getRoleMenu(Integer roleId);
 }

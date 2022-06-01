@@ -2,6 +2,7 @@ package com.hl.springboot.controller;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.hl.springboot.controller.dto.RoleMenuDTO;
 import com.hl.springboot.entity.IdEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
@@ -68,6 +69,25 @@ public class RoleController {
         queryWrapper.like("name", name);
         queryWrapper.orderByDesc("id");
         return Result.success(roleService.page(new Page<>(pageIndex, pageSize), queryWrapper));
+    }
+
+    /**
+     * 分类角色和菜单的关系
+     * @param roleMenuDTO
+     * @return
+     */
+    @PostMapping("/roleMenu")
+    public Result roleMenu(@RequestBody RoleMenuDTO roleMenuDTO) {
+        roleService.setRoleMenu(roleMenuDTO);
+        return Result.success();
+    }
+
+    /**
+     * 获取角色对应的菜单
+     */
+    @GetMapping("/getRoleMenu")
+    public Result getRole2Menu(@RequestParam Integer roleId) {
+        return Result.success(roleService.getRoleMenu(roleId));
     }
 
 }
