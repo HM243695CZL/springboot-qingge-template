@@ -10,10 +10,15 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hl.springboot.common.Constants;
 import com.hl.springboot.common.Result;
 import com.hl.springboot.controller.dto.UserDTO;
+import com.hl.springboot.controller.dto.UserRoleDTO;
 import com.hl.springboot.entity.IdEntity;
+import com.hl.springboot.entity.Role;
 import com.hl.springboot.entity.User;
+import com.hl.springboot.entity.UserRole;
+import com.hl.springboot.mapper.UserRoleMapper;
 import com.hl.springboot.service.IUserService;
 import com.hl.springboot.utils.TokenUtils;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 

@@ -63,7 +63,7 @@ public class RoleController {
     @GetMapping("/page")
     public Result page(@RequestParam Integer pageIndex,
                        @RequestParam Integer pageSize,
-                       @RequestParam String name
+                       @RequestParam(defaultValue = "") String name
                        ) {
         QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
         queryWrapper.like("name", name);
@@ -72,7 +72,7 @@ public class RoleController {
     }
 
     /**
-     * 分类角色和菜单的关系
+     * 分配角色和菜单的关系
      * @param roleMenuDTO
      * @return
      */
