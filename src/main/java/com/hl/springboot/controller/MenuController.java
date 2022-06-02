@@ -58,17 +58,7 @@ public class MenuController {
     // 获取全部
     @GetMapping("/list")
     public Result list(@RequestParam(defaultValue = "") String title) {
-        QueryWrapper<Menu> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like("title", title);
-        List<Menu> list = menuService.list(queryWrapper);
-        // 获取pid为null的一级菜单
-        List<Menu> parentNode = list.stream().filter(menu -> menu.getPid() == null).collect(Collectors.toList());
-        // 获取一级菜单的子菜单
-        for (Menu menu : parentNode) {
-            // 筛选所有数据中pid=父级id的数据就是二级菜单
-            menu.setChildren(list.stream().filter(m -> menu.getId().equals(m.getPid())).collect(Collectors.toList()));
-        }
-        return Result.success(parentNode);
+        return Result.success( menuService.findMenus(title));
     }
 
     @PostMapping("/view")

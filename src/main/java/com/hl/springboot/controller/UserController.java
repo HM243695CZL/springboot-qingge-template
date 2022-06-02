@@ -122,6 +122,7 @@ public class UserController {
         HashMap<Object, Object> map = new HashMap<>();
         map.put("userInfo", userService.getById(dto.getId()));
         map.put("token", dto.getToken());
+        map.put("menuList", dto.getMenuList());
         return Result.success(map);
     }
 
