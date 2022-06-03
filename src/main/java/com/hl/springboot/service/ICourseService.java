@@ -1,6 +1,7 @@
 package com.hl.springboot.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.hl.springboot.controller.dto.StudentCourseDTO;
 import com.hl.springboot.entity.Course;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -16,4 +17,6 @@ public interface ICourseService extends IService<Course> {
 
 
     Page<Course> findPage(Page<Course> page, String name);
+
+    void setStudentCourse(StudentCourseDTO studentCourse);
 }

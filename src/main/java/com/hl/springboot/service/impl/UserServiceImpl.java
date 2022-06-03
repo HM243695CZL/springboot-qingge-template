@@ -75,6 +75,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         return courseMapper.getCourseInfo(id);
     }
 
+    @Override
+    public List<CourseInfoDTO> getStudentCourseInfo(Integer id) {
+        return courseMapper.getStudentCourseInfo(id);
+    }
+
     /**
      * 获取当前角色的菜单列表
      * @param roles

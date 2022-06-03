@@ -23,4 +23,6 @@ public interface IUserService extends IService<User> {
     Page<User> findPage(Page<User> page);
 
     List<CourseInfoDTO> getCourseInfo(Integer id);
+
+    List<CourseInfoDTO> getStudentCourseInfo(Integer id);
 }

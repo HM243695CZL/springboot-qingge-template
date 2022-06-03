@@ -3,6 +3,7 @@ package com.hl.springboot.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hl.springboot.common.Result;
+import com.hl.springboot.controller.dto.StudentCourseDTO;
 import com.hl.springboot.entity.Course;
 import com.hl.springboot.entity.IdEntity;
 import com.hl.springboot.service.ICourseService;
@@ -62,6 +63,12 @@ public class CourseController {
                         @RequestParam(defaultValue = "") String name) {
         Page<Course> page = courseService.findPage(new Page<>(pageIndex, pageSize), name);
         return Result.success(page);
+    }
+
+    @PostMapping("/studentCourse")
+    public Result studentCourse(@RequestBody StudentCourseDTO studentCourseDTO) {
+        courseService.setStudentCourse(studentCourseDTO);
+        return Result.success();
     }
 
 }

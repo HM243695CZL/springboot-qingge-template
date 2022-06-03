@@ -155,5 +155,15 @@ public class UserController {
         return Result.success(userService.getCourseInfo(id));
     }
 
+    /**
+     * 根据学生id获取学生已选课程
+     * @param id 学生id
+     * @return
+     */
+    @GetMapping("/getStudentCourseInfo")
+    public Result getStudentCourseInfo(@RequestParam Integer id) {
+        return Result.success(userService.getStudentCourseInfo(id));
+    }
+
 }
 
