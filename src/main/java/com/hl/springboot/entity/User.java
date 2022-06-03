@@ -14,6 +14,7 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p>
@@ -49,10 +50,6 @@ public class User implements Serializable {
       @Alias("昵称")
       private String nickname;
 
-      @ApiModelProperty("所属角色")
-      @Alias("所属角色")
-      private Integer roleId;
-
       @ApiModelProperty("邮箱")
       @Alias("邮箱")
       private String email;
@@ -70,7 +67,9 @@ public class User implements Serializable {
       private LocalDateTime createTime;
 
       @TableField(exist = false)
-      private String roles;
+      private List<Integer> roleIds;
 
+      @TableField(exist = false)
+      private List<String> roles;
 
 }

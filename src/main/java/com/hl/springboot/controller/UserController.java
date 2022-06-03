@@ -49,7 +49,9 @@ public class UserController {
     // 新增或者更新
     @PostMapping("/create")
     public Result save(@RequestBody User user) {
-        return Result.success(userService.saveOrUpdate(user));
+        boolean b = userService.saveOrUpdate(user);
+        userService.setUserRole(user);
+        return Result.success(b);
     }
 
     @PostMapping("/delete")
@@ -81,19 +83,27 @@ public class UserController {
 
     @PostMapping("/view")
     public Result findOne(@RequestBody IdEntity param) {
-        return Result.success(userService.getById(param.getId()));
+        List<Integer> roleIdsList = userService.getRoleIdByUserId(param.getId());
+        User user = userService.getById(param.getId());
+        user.setRoleIds(roleIdsList);
+        return Result.success(user);
     }
 
     @GetMapping("/page")
     public Result page(@RequestParam Integer pageIndex,
                         @RequestParam Integer pageSize) {
-//        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-//        queryWrapper.orderByDesc("id");
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("id");
 //        User currentUser = TokenUtils.getCurrentUser();
 //        System.out.println("========");
 //        System.out.println(currentUser.getUsername());
 //        System.out.println("========");
-       Page<User> page =  userService.findPage(new Page<>(pageIndex, pageSize));
+//       Page<User> page =  userService.findPage(new Page<>(pageIndex, pageSize));
+        Page<User> page = userService.page(new Page<>(pageIndex, pageSize), queryWrapper);
+        for (User user : page.getRecords()) {
+            List<String> roleNameList = userService.getRoleNameByUserId(user.getId());
+            user.setRoles(roleNameList);
+        }
         return Result.success(page);
     }
 

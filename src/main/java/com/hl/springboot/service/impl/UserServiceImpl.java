@@ -8,10 +8,12 @@ import com.hl.springboot.controller.dto.CourseInfoDTO;
 import com.hl.springboot.controller.dto.UserDTO;
 import com.hl.springboot.entity.Menu;
 import com.hl.springboot.entity.User;
+import com.hl.springboot.entity.UserRole;
 import com.hl.springboot.exception.ServiceException;
 import com.hl.springboot.mapper.CourseMapper;
 import com.hl.springboot.mapper.RoleMenuMapper;
 import com.hl.springboot.mapper.UserMapper;
+import com.hl.springboot.mapper.UserRoleMapper;
 import com.hl.springboot.service.IMenuService;
 import com.hl.springboot.service.IUserService;
 import com.hl.springboot.utils.TokenUtils;
@@ -36,6 +38,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Resource
     private RoleMenuMapper roleMenuMapper;
 
+    @Resource
+    private UserRoleMapper userRoleMapper;
 
     @Resource
     private IMenuService menuService;
@@ -55,10 +59,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             String token = TokenUtils.genToken(one.getId().toString(), one.getPassword());
             userDTO.setToken(token);
 
-            Integer roles = one.getRoleId();
-            // 设置用户的菜单列表
-            List<Menu> roleMenus = getRoleMenus(roles);
-            userDTO.setMenuList(roleMenus);
+//            Integer roles = one.getRoleId();
+//            // 设置用户的菜单列表
+//            List<Menu> roleMenus = getRoleMenus(roles);
+//            userDTO.setMenuList(roleMenus);
             return userDTO;
         } else {
             throw new ServiceException(Constants.CODE_600, "用户名或密码错误");
@@ -79,6 +83,46 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public List<CourseInfoDTO> getStudentCourseInfo(Integer id) {
         return courseMapper.getStudentCourseInfo(id);
     }
+
+    /**
+     * 分配用户和角色的关系
+     * @param user
+     */
+    @Override
+    public void setUserRole(User user) {
+        // 先删除当前用户的所有角色
+        QueryWrapper<UserRole> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", user.getId());
+        userRoleMapper.delete(queryWrapper);
+        // 给当前用户绑定角色
+        for (Integer roleId : user.getRoleIds()) {
+            UserRole userRole = new UserRole();
+            userRole.setUserId(user.getId());
+            userRole.setRoleId(roleId);
+            userRoleMapper.insert(userRole);
+        }
+    }
+
+    /**
+     * 根据用户id获取角色名称
+     * @param userId 用户id
+     * @return
+     */
+    @Override
+    public List<String> getRoleNameByUserId(Integer userId) {
+        return userMapper.getRoleNameByUserId(userId);
+    }
+
+    /**
+     * 根据用户id获取角色id
+     * @param id
+     * @return
+     */
+    @Override
+    public List<Integer> getRoleIdByUserId(String id) {
+        return userMapper.getRoleIdByUserId(id);
+    }
+
 
     /**
      * 获取当前角色的菜单列表

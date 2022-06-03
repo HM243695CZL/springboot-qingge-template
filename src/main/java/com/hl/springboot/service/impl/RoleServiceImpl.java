@@ -46,14 +46,14 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
         ArrayList<Integer> menuIdsCopy = CollUtil.newArrayList(roleMenuDTO.getMenuIds());
         for (Integer menuId : roleMenuDTO.getMenuIds()) {
             Menu menu = menuService.getById(menuId);
-            // 二级菜单  并且 传过来的menuId数组没有它的父id
-            if (menu.getPid() != null && !menuIdsCopy.contains(menu.getPid())) {
-                RoleMenu roleMenu = new RoleMenu();
-                roleMenu.setRoleId(roleMenuDTO.getRoleId());
-                roleMenu.setMenuId(menu.getPid());
-                roleMenuMapper.insert(roleMenu);
-                menuIdsCopy.add(menu.getPid());
-            }
+//            // 二级菜单  并且 传过来的menuId数组没有它的父id
+//            if (menu.getPid() != null && !menuIdsCopy.contains(menu.getPid())) {
+//                RoleMenu roleMenu = new RoleMenu();
+//                roleMenu.setRoleId(roleMenuDTO.getRoleId());
+//                roleMenu.setMenuId(menu.getPid());
+//                roleMenuMapper.insert(roleMenu);
+//                menuIdsCopy.add(menu.getPid());
+//            }
             RoleMenu roleMenu = new RoleMenu();
             roleMenu.setRoleId(roleMenuDTO.getRoleId());
             roleMenu.setMenuId(menuId);

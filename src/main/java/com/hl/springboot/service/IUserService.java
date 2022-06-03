@@ -20,9 +20,16 @@ public interface IUserService extends IService<User> {
 
     UserDTO login(UserDTO userDTO);
 
+
     Page<User> findPage(Page<User> page);
 
     List<CourseInfoDTO> getCourseInfo(Integer id);
 
     List<CourseInfoDTO> getStudentCourseInfo(Integer id);
+
+    void setUserRole(User user);
+
+    List<String> getRoleNameByUserId(Integer userId);
+
+    List<Integer> getRoleIdByUserId(String id);
 }
