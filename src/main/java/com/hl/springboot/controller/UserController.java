@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hl.springboot.common.Constants;
 import com.hl.springboot.common.Result;
+import com.hl.springboot.controller.dto.CourseInfoDTO;
 import com.hl.springboot.controller.dto.UserDTO;
 import com.hl.springboot.controller.dto.UserRoleDTO;
 import com.hl.springboot.entity.IdEntity;
@@ -66,6 +67,18 @@ public class UserController {
         return Result.success(userService.list());
     }
 
+    /**
+     * 根据角色id获取对应的所有用户
+     * @param roleId 角色id
+     * @return
+     */
+    @GetMapping("/getUsersByRoleId")
+    public Result getUsersByRoleId (@RequestParam Integer roleId) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("role_id", roleId);
+        return Result.success(userService.list(queryWrapper));
+    }
+
     @PostMapping("/view")
     public Result findOne(@RequestBody IdEntity param) {
         return Result.success(userService.getById(param.getId()));
@@ -73,14 +86,15 @@ public class UserController {
 
     @GetMapping("/page")
     public Result page(@RequestParam Integer pageIndex,
-                                @RequestParam Integer pageSize) {
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.orderByDesc("id");
-        User currentUser = TokenUtils.getCurrentUser();
-        System.out.println("========");
-        System.out.println(currentUser.getUsername());
-        System.out.println("========");
-        return Result.success(userService.page(new Page<>(pageIndex, pageSize), queryWrapper));
+                        @RequestParam Integer pageSize) {
+//        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+//        queryWrapper.orderByDesc("id");
+//        User currentUser = TokenUtils.getCurrentUser();
+//        System.out.println("========");
+//        System.out.println(currentUser.getUsername());
+//        System.out.println("========");
+       Page<User> page =  userService.findPage(new Page<>(pageIndex, pageSize));
+        return Result.success(page);
     }
 
     @GetMapping("/export")
@@ -129,6 +143,16 @@ public class UserController {
     @PostMapping("/userInfo")
     public Result getUserInfo(@RequestBody IdEntity param) {
         return Result.success(userService.getById(param.getId()));
+    }
+
+    /**
+     * 根据老师id获取老师用户对应的课程信息
+     * @param id 老师的id
+     * @return
+     */
+    @GetMapping("/getCourseInfo")
+    public Result getCourseInfo(@RequestParam Integer id) {
+        return Result.success(userService.getCourseInfo(id));
     }
 
 }

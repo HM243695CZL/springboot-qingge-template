@@ -1,8 +1,12 @@
 package com.hl.springboot.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.hl.springboot.controller.dto.CourseInfoDTO;
 import com.hl.springboot.controller.dto.UserDTO;
 import com.hl.springboot.entity.User;
+
+import java.util.List;
 
 /**
  * <p>
@@ -15,4 +19,8 @@ import com.hl.springboot.entity.User;
 public interface IUserService extends IService<User> {
 
     UserDTO login(UserDTO userDTO);
+
+    Page<User> findPage(Page<User> page);
+
+    List<CourseInfoDTO> getCourseInfo(Integer id);
 }

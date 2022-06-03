@@ -1,12 +1,15 @@
 package com.hl.springboot.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hl.springboot.common.Constants;
+import com.hl.springboot.controller.dto.CourseInfoDTO;
 import com.hl.springboot.controller.dto.UserDTO;
 import com.hl.springboot.entity.Menu;
 import com.hl.springboot.entity.User;
 import com.hl.springboot.exception.ServiceException;
+import com.hl.springboot.mapper.CourseMapper;
 import com.hl.springboot.mapper.RoleMenuMapper;
 import com.hl.springboot.mapper.UserMapper;
 import com.hl.springboot.service.IMenuService;
@@ -37,6 +40,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Resource
     private IMenuService menuService;
 
+    @Resource
+    private UserMapper userMapper;
+
+    @Resource
+    private CourseMapper courseMapper;
+
     @Override
     public UserDTO login(UserDTO userDTO) {
         User one = getUserInfo(userDTO);
@@ -46,7 +55,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             String token = TokenUtils.genToken(one.getId().toString(), one.getPassword());
             userDTO.setToken(token);
 
-            Integer roles = one.getRoles();
+            Integer roles = one.getRoleId();
             // 设置用户的菜单列表
             List<Menu> roleMenus = getRoleMenus(roles);
             userDTO.setMenuList(roleMenus);
@@ -54,6 +63,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         } else {
             throw new ServiceException(Constants.CODE_600, "用户名或密码错误");
         }
+    }
+
+    @Override
+    public Page<User> findPage(Page<User> page) {
+        return userMapper.findPage(page);
+    }
+
+    @Override
+    public List<CourseInfoDTO> getCourseInfo(Integer id) {
+        return courseMapper.getCourseInfo(id);
     }
 
     /**

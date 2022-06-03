@@ -2,6 +2,7 @@ package com.hl.springboot.entity;
 
 import cn.hutool.core.annotation.Alias;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -49,8 +50,8 @@ public class User implements Serializable {
       private String nickname;
 
       @ApiModelProperty("所属角色")
-      @Alias("昵称")
-      private Integer roles;
+      @Alias("所属角色")
+      private Integer roleId;
 
       @ApiModelProperty("邮箱")
       @Alias("邮箱")
@@ -67,6 +68,9 @@ public class User implements Serializable {
       @ApiModelProperty("创建时间")
       @Alias("创建时间")
       private LocalDateTime createTime;
+
+      @TableField(exist = false)
+      private String roles;
 
 
 }
