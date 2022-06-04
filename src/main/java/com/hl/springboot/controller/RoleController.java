@@ -1,19 +1,21 @@
 package com.hl.springboot.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.hl.springboot.common.Result;
 import com.hl.springboot.controller.dto.RoleMenuDTO;
 import com.hl.springboot.entity.IdEntity;
+import com.hl.springboot.entity.Role;
+import com.hl.springboot.entity.RoleMenu;
+import com.hl.springboot.entity.UserRole;
+import com.hl.springboot.mapper.RoleMenuMapper;
+import com.hl.springboot.mapper.UserRoleMapper;
+import com.hl.springboot.service.IRoleService;
 import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
 import java.util.List;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.hl.springboot.common.Result;
-
-import com.hl.springboot.service.IRoleService;
-import com.hl.springboot.entity.Role;
-
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -30,6 +32,12 @@ public class RoleController {
     @Resource
     private IRoleService roleService;
 
+    @Resource
+    private UserRoleMapper userRoleMapper;
+
+    @Resource
+    private RoleMenuMapper roleMenuMapper;
+
     // 新增或者更新
     @PostMapping("/create")
     public Result save(@RequestBody Role role) {
@@ -39,6 +47,15 @@ public class RoleController {
     // 删除
     @PostMapping("/delete")
     public Result delete(@RequestBody IdEntity param) {
+        // 删除用户角色关联表和角色菜单关联表的数据
+        QueryWrapper<UserRole> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("role_id", param.getId());
+        userRoleMapper.delete(queryWrapper);
+
+        QueryWrapper<RoleMenu> wrapper = new QueryWrapper<>();
+        wrapper.eq("role_id", param.getId());
+        roleMenuMapper.delete(wrapper);
+
         return Result.success( roleService.removeById(param.getId()));
     }
 

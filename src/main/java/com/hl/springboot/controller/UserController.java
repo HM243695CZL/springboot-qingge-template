@@ -46,6 +46,9 @@ public class UserController {
     @Resource
     private IUserService userService;
 
+    @Resource
+    private UserRoleMapper userRoleMapper;
+
     // 新增或者更新
     @PostMapping("/create")
     public Result save(@RequestBody User user) {
@@ -56,12 +59,11 @@ public class UserController {
 
     @PostMapping("/delete")
     public Result delete(@RequestBody IdEntity param) {
+        // 删除user_role表的相关数据
+        QueryWrapper<UserRole> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", param.getId());
+        userRoleMapper.delete(queryWrapper);
         return Result.success( userService.removeById(param.getId()));
-    }
-
-    @PostMapping("/del/batch")
-    public Result deleteBatch(@RequestBody List<Integer> ids) {
-        return Result.success(userService.removeByIds(ids));
     }
 
     @GetMapping("/list")
@@ -144,7 +146,9 @@ public class UserController {
         }
         UserDTO dto = userService.login(userDTO);
         HashMap<Object, Object> map = new HashMap<>();
-        map.put("userInfo", userService.getById(dto.getId()));
+        User userInfo = userService.getById(dto.getId());
+        userInfo.setRoles(userService.getRoleNameByUserId(userDTO.getId()));
+        map.put("userInfo", userInfo);
         map.put("token", dto.getToken());
         map.put("menuList", dto.getMenuList());
         return Result.success(map);

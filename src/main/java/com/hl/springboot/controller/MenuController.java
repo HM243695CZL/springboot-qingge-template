@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hl.springboot.common.Constants;
 import com.hl.springboot.entity.Dict;
 import com.hl.springboot.entity.IdEntity;
+import com.hl.springboot.entity.RoleMenu;
 import com.hl.springboot.mapper.DictMapper;
+import com.hl.springboot.mapper.RoleMenuMapper;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.List;
@@ -37,6 +39,9 @@ public class MenuController {
     @Resource
     private DictMapper dictMapper;
 
+    @Resource
+    private RoleMenuMapper roleMenuMapper;
+
     // 新增或者更新
     @PostMapping("/create")
     public Result save(@RequestBody Menu menu) {
@@ -46,13 +51,11 @@ public class MenuController {
     // 删除
     @PostMapping("/delete")
     public Result delete(@RequestBody IdEntity param) {
-        return Result.success( menuService.removeById(param.getId()));
-    }
+        QueryWrapper<RoleMenu> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("role_id", param.getId());
+        roleMenuMapper.delete(queryWrapper);
 
-    // 批量删除
-    @PostMapping("/del/batch")
-    public Result deleteBatch(@RequestBody List<Integer> ids) {
-        return Result.success(menuService.removeByIds(ids));
+        return Result.success( menuService.removeById(param.getId()));
     }
 
     // 获取全部

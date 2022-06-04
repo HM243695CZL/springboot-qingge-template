@@ -27,7 +27,6 @@ public class TreeUtils {
                     menu.setRoles(roleList);
                 }
                 menu.getChildren().add(findChild(m, list, roleList));
-                m.setRoles(roleList);
             } else {
                 m.setRoles(roleList);
             }
