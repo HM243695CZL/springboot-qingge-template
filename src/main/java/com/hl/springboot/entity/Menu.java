@@ -49,16 +49,16 @@ public class Menu implements Serializable {
       private String isLink;
 
       @ApiModelProperty("是否隐藏 0：隐藏 1: 显示")
-      private Integer isHide;
+      private Boolean isHide;
 
       @ApiModelProperty("是否缓存 0: 否 1：是")
-      private Integer isKeepAlive;
+      private Boolean isKeepAlive;
 
       @ApiModelProperty("是否固定标签 0：否 1：是")
-      private Integer isAffix;
+      private Boolean isAffix;
 
       @ApiModelProperty("是否内嵌窗口 0：否 1：是")
-      private Integer isIframe;
+      private Boolean isIframe;
 
       @ApiModelProperty("图标")
       private String icon;

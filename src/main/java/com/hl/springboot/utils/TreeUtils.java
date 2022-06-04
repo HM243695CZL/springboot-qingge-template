@@ -28,6 +28,8 @@ public class TreeUtils {
                 }
                 menu.getChildren().add(findChild(m, list, roleList));
                 m.setRoles(roleList);
+            } else {
+                m.setRoles(roleList);
             }
         }
         return menu;
