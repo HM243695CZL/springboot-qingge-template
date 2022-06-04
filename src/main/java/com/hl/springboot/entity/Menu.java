@@ -68,4 +68,7 @@ public class Menu implements Serializable {
 
       @TableField(exist = false)
       private List<Menu> children;
+
+      @TableField(exist = false)
+      private List<String> roles;
 }

@@ -1,6 +1,7 @@
 package com.hl.springboot.mapper;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.hl.springboot.entity.Menu;
 import com.hl.springboot.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
@@ -22,4 +23,6 @@ public interface UserMapper extends BaseMapper<User> {
     List<String> getRoleNameByUserId(@Param("userId") Integer userId);
 
     List<Integer> getRoleIdByUserId(@Param("id") String id);
+
+    List<Menu> getMenuListByUserId(@Param("userId") Integer userId);
 }
