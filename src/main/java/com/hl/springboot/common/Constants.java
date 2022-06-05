@@ -9,4 +9,6 @@ public interface Constants {
     Integer CODE_600 = 600; // 其他业务异常
 
     String DICT_TYPE_ICON = "icon";
+
+    String ROLE_KEY = "ROLE_KEY";
 }

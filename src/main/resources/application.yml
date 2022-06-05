@@ -9,6 +9,9 @@ spring:
     url: jdbc:mysql://localhost:3306/hl?serverTimezone=GMT%2b8
     username: root
     password: root
+  redis:
+    port: 6379
+    host: localhost
 mybatis:
   mapper-locations: classpath:mapper/*.xml #扫描所有mybatis的xml文件
 #  #输出sql语句
