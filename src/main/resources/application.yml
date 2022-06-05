@@ -12,6 +12,10 @@ spring:
   redis:
     port: 6379
     host: localhost
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
 mybatis:
   mapper-locations: classpath:mapper/*.xml #扫描所有mybatis的xml文件
 #  #输出sql语句
